@@ -5,6 +5,8 @@
 #include<assert.h>
 #include<string>
 
+namespace nano {
+
 // Serializing Starts Here
 
 ///////////////////
@@ -129,3 +131,5 @@ bool CloseInputFile()
 }
 
 // Deserializing End Here
+
+}

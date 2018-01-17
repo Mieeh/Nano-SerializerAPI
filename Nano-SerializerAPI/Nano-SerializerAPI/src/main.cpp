@@ -5,20 +5,29 @@
 
 int main()
 {
-	//OpenOutputFile("D:\\what.txt", OpenMode::INPUT);
-	//WriteToFile("hellfkefjko");
-	//CloseOutputFile();
+	OpenOutputFile("what.txt", OpenMode::TRUNCATE);
+	WriteToFile("hell", true);
+	WriteToFile("hello",true);
+	InsertBlankLine(); InsertBlankLine();
+	WriteToFile("I'm pretty far down right?");
+	CloseOutputFile();
 
-	std::ifstream _ifstream;
-	_ifstream.open("D:\\what.txt");
+	OpenInputFile("what.txt");
+	std::string temp;
+	GetAllFileContent(temp);
+	std::cout << temp << std::endl;
+	CloseInputFile();
 
-	std::string _fileContent = "";
-	std::string _line;
-	while (std::getline(_ifstream, _line)) {
-		_fileContent += _line + "\n";
-	}
-
-	std::cout << _fileContent << std::endl;
+	//std::ifstream _ifstream;
+	//_ifstream.open("what.txt");
+	//
+	//std::string _fileContent = "";
+	//std::string _line;
+	//while (std::getline(_ifstream, _line)) {
+	//	_fileContent += _line + "\n";
+	//}
+	//
+	//std::cout << _fileContent << std::endl;
 
 	system("pause>null");
 	return 0;

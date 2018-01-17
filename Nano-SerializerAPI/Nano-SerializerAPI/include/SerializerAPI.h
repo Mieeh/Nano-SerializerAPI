@@ -3,12 +3,13 @@
 #include<fstream>
 #include<iostream>
 #include<assert.h>
+#include<string>
 
 // Serializing Starts Here
 
 ///////////////////
-//
-//
+// 
+// 
 enum OpenMode {
 	NONE = 0x0,
 	INPUT = 0x1,	   // >> ifstream default
@@ -22,8 +23,8 @@ static std::ofstream gCurrentOutputFile;
 static std::ifstream gCurrentInputFile;
 
 ///////////////////
+// Opens gCurrentOutputFile at a_filePath
 // 
-//
 bool OpenOutputFile(std::string a_filePath, int _openMode = OpenMode::NONE)
 {
 	gCurrentOutputFile.open(a_filePath,
@@ -39,11 +40,13 @@ bool OpenOutputFile(std::string a_filePath, int _openMode = OpenMode::NONE)
 }
 
 ///////////////////
-//
-//
+// Writes a_data into the gCurrentOutputFile
+// 
 void WriteToFile(std::string a_data, bool a_insertNewLine = false)
 {
-	assert(gCurrentOutputFile.is_open()); // Make sure a file is open i.e call OpenOutputFile before WriteToFile();
+	if (!gCurrentOutputFile.is_open()){
+		return;
+	}
 
 	// Write the a_data (text) to the file
 	if (a_insertNewLine)
@@ -53,8 +56,20 @@ void WriteToFile(std::string a_data, bool a_insertNewLine = false)
 }
 
 ///////////////////
+// Inserts a break line into the gCurrentOutputFile
 //
-//
+void InsertBlankLine() 
+{
+	if (!gCurrentOutputFile.is_open()) {
+		return;
+	}
+
+	gCurrentOutputFile << "\n";
+}
+
+///////////////////
+// Closes the gCurrentOutputFile
+// 
 bool CloseOutputFile()
 {
 	gCurrentOutputFile.close();
@@ -69,12 +84,12 @@ bool CloseOutputFile()
 // Deserializing Starts Here
 
 ///////////////////
+// Opens gCurrentInputFile at a_filePath
 // 
-//
 bool OpenInputFile(std::string a_filePath, int _openMode = OpenMode::NONE)
 {
 	gCurrentInputFile.open(a_filePath,
-		_openMode == OpenMode::OUTPUT |
+		_openMode == OpenMode::INPUT |
 		_openMode == OpenMode::BINARY ? std::ios::binary : 0 |
 		_openMode == OpenMode::AT_END ? std::ios::app : 0 |
 		_openMode == OpenMode::TRUNCATE ? std::ios::trunc : 0
@@ -85,6 +100,32 @@ bool OpenInputFile(std::string a_filePath, int _openMode = OpenMode::NONE)
 	return true;
 }
 
+///////////////////
+// Gets the whole content of the gCurrentInputFile in std::string form
+// 
+void GetAllFileContent(std::string &a_string)
+{
+	if (!gCurrentInputFile.is_open()) {
+		return;
+	}
 
+	a_string.clear();
+	std::string _word;
+	while (std::getline(gCurrentInputFile, _word)) {
+		a_string += _word + "\n";
+	}
+}
+
+///////////////////
+// Closes gCurrentInputFile 
+// 
+bool CloseInputFile()
+{
+	gCurrentInputFile.close();
+	if (gCurrentInputFile.is_open()) {
+		return false;
+	}
+	return true;
+}
 
 // Deserializing End Here
